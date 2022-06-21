@@ -1,0 +1,21 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "mix",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
+        "prod": "npm run production",
+        "production": "mix --production"
+    },
+    "devDependencies": {
+        "@tailwindcss/forms": "^0.4.1",
+        "alpinejs": "^3.0.6",
+        "laravel-mix": "^6.0.6",
+        "postcss": "^8.4.12",
+        "postcss-import": "^14.0.1",
+        "tailwindcss": "^3.0.23",
+        "apexcharts": "^3.35.3"
+    }
+}
