@@ -23,7 +23,7 @@ class TopBar extends Component
         $data = $controller->index();
 
         $data['wait'] = collect($data['wait'])
-            ->mapWithKeys(fn(int $wait, string $queue) => [Str::afterLast(':', $queue) => $timeHelper->secondsToTime($wait)]);
+            ->mapWithKeys(fn(int $wait, string $queue) => [Str::afterLast($queue, ':') => $timeHelper->secondsToTime($wait)]);
 
         return view('horizondashboard::livewire.components.top-bar', ['data' => $data]);
     }
