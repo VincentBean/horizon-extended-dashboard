@@ -1,5 +1,7 @@
 # Laravel Horizon Extended Dashboard
 
+![banner](https://banners.beyondco.de/Horizon%20Extended%20Dashboard.png?theme=dark&packageManager=composer+require&packageName=vincentbean%2Fhorizon-extended-dashboard&pattern=deathStar&style=style_1&description=Alternative+Dashboard+for+LaravelHorizon&md=1&showWatermark=0&fontSize=100px&images=cube)
+
 This is an alternative dashboard for Laravel Horizon written with Livewire.
 The reason that I've created this is that the default Horizon dashboard lacks features such as controls and a queue filter.
 
