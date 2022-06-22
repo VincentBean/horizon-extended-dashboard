@@ -16,6 +16,10 @@ class JobDeleted
             ->where('uuid', $payload['uuid'])
             ->first();
 
+        if ($statistic === null) {
+            return;
+        }
+
         $statistic->fill(
             [
                 'attempts' => $payload['attempts'],
