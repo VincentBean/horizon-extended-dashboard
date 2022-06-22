@@ -24,10 +24,6 @@ class JobException
             ->where('uuid', $payload['uuid'])
             ->first();
 
-        if ($statistic === null) {
-            return;
-        }
-        
         $runtime = $statistic !== null
             ? Carbon::createFromTimestampMs($statistic['reserved_at'])->floatDiffInSeconds(now())
             : 0;
