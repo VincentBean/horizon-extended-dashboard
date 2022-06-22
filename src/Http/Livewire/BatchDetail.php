@@ -2,14 +2,7 @@
 
 namespace VincentBean\HorizonDashboard\Http\Livewire;
 
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Laravel\Horizon\Contracts\JobRepository;
 use Livewire\Component;
 use VincentBean\HorizonDashboard\Actions\RetrieveBatchData;

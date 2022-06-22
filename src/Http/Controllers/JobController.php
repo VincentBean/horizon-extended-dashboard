@@ -3,7 +3,6 @@
 namespace VincentBean\HorizonDashboard\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Route;
 
 class JobController extends Controller
 {

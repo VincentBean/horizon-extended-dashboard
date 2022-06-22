@@ -2,7 +2,6 @@
 
 namespace VincentBean\HorizonDashboard\Listeners;
 
-use Laravel\Horizon\Events\JobDeleted as JobDeletedEvent;
 use Laravel\Horizon\Events\JobFailed as JobFailedEvent;
 use VincentBean\HorizonDashboard\Models\JobStatistic;
 

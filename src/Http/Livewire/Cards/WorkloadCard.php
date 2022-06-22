@@ -3,13 +3,8 @@
 namespace VincentBean\HorizonDashboard\Http\Livewire\Cards;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
-use Laravel\Horizon\Contracts\JobRepository;
 use Laravel\Horizon\Contracts\WorkloadRepository;
-use Laravel\Horizon\Http\Controllers\DashboardStatsController;
 use Livewire\Component;
-use stdClass;
-use VincentBean\HorizonDashboard\Data\Job;
 use VincentBean\HorizonDashboard\Helpers\TimeHelper;
 
 class WorkloadCard extends Component

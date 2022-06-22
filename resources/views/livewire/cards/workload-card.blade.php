@@ -24,7 +24,7 @@
                     <tr>
                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $queue['name'] }}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $queue['processes'] }}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $queue['length'] }}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ number_format($queue['length']) }}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $queue['wait'] }}</td>
                     </tr>
                 @endforeach

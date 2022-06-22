@@ -2,12 +2,9 @@
 
 namespace VincentBean\HorizonDashboard\Actions;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 use VincentBean\HorizonDashboard\Helpers\TitleHelper;
 use VincentBean\HorizonDashboard\Helpers\ValueHelper;
-use VincentBean\HorizonDashboard\Models\Batch;
 use VincentBean\HorizonDashboard\Models\JobStatistic;
 
 class RetrieveJobData

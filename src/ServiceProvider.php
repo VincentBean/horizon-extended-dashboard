@@ -3,10 +3,7 @@
 namespace VincentBean\HorizonDashboard;
 
 use Illuminate\Queue\Events\JobExceptionOccurred;
-use Illuminate\Queue\Events\JobProcessed;
-use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Laravel\Horizon\Console\ContinueCommand;
 use Laravel\Horizon\Console\ContinueSupervisorCommand;
@@ -20,7 +17,9 @@ use Laravel\Horizon\Events\JobReserved;
 use Livewire\Livewire;
 use VincentBean\HorizonDashboard\Commands\AggregateJobStatisticsCommand;
 use VincentBean\HorizonDashboard\Commands\AggregateQueueStatisticsCommand;
+use VincentBean\HorizonDashboard\Commands\CleanupExceptionsCommand;
 use VincentBean\HorizonDashboard\Commands\CleanupStatisticsCommand;
+use VincentBean\HorizonDashboard\Commands\PublishCommand;
 use VincentBean\HorizonDashboard\Commands\QueueSnapshotCommand;
 use VincentBean\HorizonDashboard\Http\Livewire\BatchDetail;
 use VincentBean\HorizonDashboard\Http\Livewire\BatchList;
@@ -34,14 +33,27 @@ use VincentBean\HorizonDashboard\Http\Livewire\JobDetail;
 use VincentBean\HorizonDashboard\Http\Livewire\JobList;
 use VincentBean\HorizonDashboard\Http\Livewire\Components\TopBar;
 use VincentBean\HorizonDashboard\Http\Livewire\Cards\WorkloadCard;
-use VincentBean\HorizonDashboard\Observers\QueueObserver;
 
 class ServiceProvider extends BaseServiceProvider
 {
     public function register()
     {
-        // Register when not running in the console so that we can call these outside of the console
-        if (!$this->app->runningInConsole()) {
+        $this->registerCommands();
+    }
+
+    protected function registerCommands(): static
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                QueueSnapshotCommand::class,
+                AggregateJobStatisticsCommand::class,
+                AggregateQueueStatisticsCommand::class,
+                CleanupStatisticsCommand::class,
+                CleanupExceptionsCommand::class,
+                PublishCommand::class
+            ]);
+        } else {
+            // Register Horizon commands so that we can use it in a http context
             $this->commands([
                 ContinueCommand::class,
                 ContinueSupervisorCommand::class,
@@ -50,6 +62,8 @@ class ServiceProvider extends BaseServiceProvider
                 TerminateCommand::class,
             ]);
         }
+
+        return $this;
     }
 
     public function boot()
@@ -60,7 +74,6 @@ class ServiceProvider extends BaseServiceProvider
             ->bootLivewire()
             ->bootEvents()
             ->bootMigrations()
-            ->bootCommands()
             ->bootPublish();
     }
 
@@ -83,11 +96,6 @@ class ServiceProvider extends BaseServiceProvider
         Livewire::component('horizon-dashboard.components.top-bar', TopBar::class);
         Livewire::component('horizon-dashboard.components.controls', Controls::class);
 
-        Livewire::component('horizon-dashboard.components.charts.job-runtime-chart', JobRuntimeChart::class);
-        Livewire::component('horizon-dashboard.components.charts.queue-jobcounts-chart', QueueJobCountsChart::class);
-        Livewire::component('horizon-dashboard.components.charts.queue-jobsperminute-chart', QueueJobPerMinuteChart::class);
-        Livewire::component('horizon-dashboard.components.charts.queue-jobtypes-chart', QueueJobTypesChart::class);
-
         Livewire::component('horizon-dashboard.workload-card', WorkloadCard::class);
         Livewire::component('horizon-dashboard.supervisors-card', SupervisorsCard::class);
 
@@ -97,6 +105,10 @@ class ServiceProvider extends BaseServiceProvider
         Livewire::component('horizon-dashboard.batch-list', BatchList::class);
         Livewire::component('horizon-dashboard.batch-detail', BatchDetail::class);
 
+        Livewire::component('horizon-dashboard.components.charts.job-runtime-chart', JobRuntimeChart::class);
+        Livewire::component('horizon-dashboard.components.charts.queue-jobcounts-chart', QueueJobCountsChart::class);
+        Livewire::component('horizon-dashboard.components.charts.queue-jobsperminute-chart', QueueJobPerMinuteChart::class);
+        Livewire::component('horizon-dashboard.components.charts.queue-jobtypes-chart', QueueJobTypesChart::class);
 
         return $this;
     }
@@ -119,24 +131,10 @@ class ServiceProvider extends BaseServiceProvider
         return $this;
     }
 
-    protected function bootCommands(): static
-    {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                QueueSnapshotCommand::class,
-                AggregateJobStatisticsCommand::class,
-                AggregateQueueStatisticsCommand::class,
-                CleanupStatisticsCommand::class
-            ]);
-        }
-
-        return $this;
-    }
-
     protected function bootPublish(): static
     {
         $this->publishes([
-            realpath(__DIR__.'/../public') => public_path('vendor/extended-horizon-dashboard'),
+            realpath(__DIR__ . '/../public') => public_path('vendor/extended-horizon-dashboard'),
         ], ['extended-horizon-dashboard-assets']);
 
         return $this;

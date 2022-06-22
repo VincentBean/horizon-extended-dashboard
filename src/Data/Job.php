@@ -4,7 +4,6 @@ namespace VincentBean\HorizonDashboard\Data;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use VincentBean\HorizonDashboard\Models\JobStatistic;
 

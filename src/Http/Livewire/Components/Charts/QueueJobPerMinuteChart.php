@@ -3,13 +3,9 @@
 namespace VincentBean\HorizonDashboard\Http\Livewire\Components\Charts;
 
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
-use Asantibanez\LivewireCharts\Models\ColumnChartModel;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
 use Livewire\Component;
-use VincentBean\HorizonDashboard\Models\JobInformation;
-use VincentBean\HorizonDashboard\Models\JobStatistic;
 use VincentBean\HorizonDashboard\Models\QueueStatistic;
 
 class QueueJobPerMinuteChart extends Component

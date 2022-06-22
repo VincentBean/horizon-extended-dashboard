@@ -3,10 +3,7 @@
 namespace VincentBean\HorizonDashboard\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use VincentBean\HorizonDashboard\Models\JobInformation;
-use VincentBean\HorizonDashboard\Models\JobStatistic;
 use VincentBean\HorizonDashboard\Models\QueueStatistic;
 
 class QueueStatisticFactory extends Factory

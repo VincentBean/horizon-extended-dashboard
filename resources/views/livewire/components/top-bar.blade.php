@@ -15,8 +15,8 @@
             <span>Processes: {{ $data['processes'] }}</span>
             <span>Jobs/min: {{ $data['jobsPerMinute'] }}</span>
             <span>Recent: {{ $data['recentJobs'] }}</span>
-            <span>Recent (7d): {{ $data['periods']['recentJobs'] }}</span>
-            <span>Failed (7d): {{ $data['periods']['failedJobs'] }}</span>
+            <span>Recent (7d): {{ number_format($data['periods']['recentJobs']) }}</span>
+            <span>Failed (7d): {{ number_format($data['periods']['failedJobs']) }}</span>
             <span>Max runtime: {{ $data['queueWithMaxRuntime'] ?? '-' }}</span>
             <span>Max troughput: {{ $data['queueWithMaxThroughput'] ?? '-' }}</span>
             @foreach ($data['wait'] as $queue => $wait)

@@ -3,13 +3,9 @@
 namespace VincentBean\HorizonDashboard\Http\Livewire\Components;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Laravel\Horizon\Contracts\JobRepository;
 use Laravel\Horizon\Http\Controllers\DashboardStatsController;
 use Livewire\Component;
-use stdClass;
-use VincentBean\HorizonDashboard\Data\Job;
 use VincentBean\HorizonDashboard\Helpers\TimeHelper;
 
 class TopBar extends Component

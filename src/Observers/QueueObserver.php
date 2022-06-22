@@ -2,10 +2,8 @@
 
 namespace VincentBean\HorizonDashboard\Observers;
 
-use Carbon\Carbon;
 use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
-use VincentBean\HorizonDashboard\Models\JobInformation;
 use VincentBean\HorizonDashboard\Models\JobStatistic;
 
 class QueueObserver

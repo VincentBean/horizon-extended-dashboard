@@ -5,8 +5,6 @@ namespace VincentBean\HorizonDashboard\Commands;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use VincentBean\HorizonDashboard\Actions\RetrieveQueues;
-use VincentBean\HorizonDashboard\Actions\Statistics\TakeQueueSnapshot;
 use VincentBean\HorizonDashboard\Models\JobStatistic;
 
 class AggregateJobStatisticsCommand extends Command
