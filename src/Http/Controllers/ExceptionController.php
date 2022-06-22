@@ -13,7 +13,6 @@ class ExceptionController extends Controller
                 'exceptions' => JobException::query()
                     ->orderBy('occured_at')
                     ->with('jobInformation')
-                    ->get()
                     ->paginate(25)
             ]
         );
