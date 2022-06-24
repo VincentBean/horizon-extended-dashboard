@@ -31,8 +31,8 @@ class JobException
         JobExceptionModel::create([
             'job_information_id' => $jobInformation->id,
             'occured_at' => now(),
-            'uuid' => $payload['uuid'],
-            'attempt' => $payload['attempts'],
+            'uuid' => $payload['uuid'] ?? '',
+            'attempt' => $payload['attempts'] ?? 0,
             'runtime' => $runtime,
             'exception' => get_class($event->exception),
             'message' => $event->exception->getMessage(),

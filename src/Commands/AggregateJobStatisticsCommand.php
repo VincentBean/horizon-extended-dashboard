@@ -5,6 +5,9 @@ namespace VincentBean\HorizonDashboard\Commands;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use VincentBean\HorizonDashboard\Actions\RetrieveQueues;
+use VincentBean\HorizonDashboard\Jobs\AggregateJobStatisticsJob;
+use VincentBean\HorizonDashboard\Models\JobInformation;
 use VincentBean\HorizonDashboard\Models\JobStatistic;
 
 class AggregateJobStatisticsCommand extends Command
@@ -15,7 +18,7 @@ class AggregateJobStatisticsCommand extends Command
                 --interval: Interval in minutes
                 --keep: Don\'t aggregate minutes';
 
-    public function handle()
+    public function handle(RetrieveQueues $retrieveQueues)
     {
         $interval = $this->option('interval');
         $keep = $this->option('keep');
@@ -35,64 +38,37 @@ class AggregateJobStatisticsCommand extends Command
         $endDate = now()->subMinutes($keep);
 
         $minuteDiff = $startDate->diffInMinutes($endDate);
+
+        if ($minuteDiff < 0) {
+            return static::SUCCESS;
+        }
+
         $steps = ceil($minuteDiff / $interval);
 
-        $this->info("Aggregating from {$startDate->toDateTimeString()} to {$endDate->toDateTimeString()} in $steps steps");
+        $this->info("Aggregating from {$startDate->toDateTimeString()} to {$endDate->toDateTimeString()}");
 
         for ($i = 0; $i < $steps; $i++) {
             $from = (clone $startDate)->addMinutes($i * $interval);
             $to = (clone $startDate)->addMinutes(($i + 1) * $interval);
 
-            $targetStatisticsQuery = JobStatistic::query()
+            $jobIdsAndQueue = JobStatistic::query()
                 ->where('aggregated', false)
                 ->where('queued_at', '>=', $from->getPreciseTimestamp(3))
-                ->where('queued_at', '<', $to->getPreciseTimestamp(3));
+                ->where('queued_at', '<', $to->getPreciseTimestamp(3))
+                ->distinct();
 
-            $targetStatistics = $targetStatisticsQuery
-                ->get();
+            $jobIds = $jobIdsAndQueue->select(['job_information_id'])->get()->pluck('job_information_id');
+            $queues = $jobIdsAndQueue->select(['queue'])->get()->pluck('queue');
 
-            $grouped = $targetStatistics->groupBy('job_information_id')
-                ->map(fn(Collection $group) => $group->groupBy('queue'));
-
-            /**
-             * @var int $jobId
-             * @var Collection $queues
-             */
-            foreach ($grouped as $jobId => $queues) {
-                /**
-                 * @var string $queue
-                 * @var Collection<JobStatistic> $statistics
-                 */
-                foreach ($queues as $queue => $statistics) {
-
-                    if ($statistics->count() === 1) {
-                        $statistics->first()->update([
-                            'aggregated' => true,
-                            'aggregated_job_count' => 1,
-                            'aggregated_failed_count' => $statistics->first()->failed ? 1 : 0
-                        ]);
-                        continue;
-                    }
-
-                    $aggregated = JobStatistic::create([
-                        'job_information_id' => $jobId,
-                        'aggregated' => true,
-                        'queued_at' => $from->getPreciseTimestamp(3),
-                        'queue' => $queue,
-                        'runtime' => $statistics->average('runtime'),
-                        'attempts' => $statistics->average('attempts'),
-                        'aggregated_job_count' => $statistics->count(),
-                        'aggregated_failed_count' => $statistics->where('failed', true)->count()
-                    ]);
-
-                    JobStatistic::query()
-                        ->whereIn('id', $statistics->pluck('id'))
-                        ->delete();
-
-                    $this->info("Aggregated {$aggregated->aggregated_job_count} from {$from->toDateTimeString()} to {$to->toDateTimeString()} jobs for ID $jobId on queue $queue");
+            foreach ($queues as $queue) {
+                foreach ($jobIds as $jobId) {
+                    AggregateJobStatisticsJob::dispatch($jobId, $queue, $from, $to);
                 }
             }
+
         }
+
+        $this->info('Dispatched aggregate jobs into the queue');
 
         return static::SUCCESS;
     }

@@ -40,22 +40,38 @@ You can optionally add this to your post install or update composer script to ma
 }
 ```
 
-Finally, you should configure your scheduler to include these commands:
+### Statistics
+
+To collect queue statistics you can add these commands to your scheduler:
 ```php
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('horizon:snapshot')->everyFifteenMinutes();
         $schedule->command('horizon-dashboard:queue-snapshot')->everyFifteenMinutes();
-        $schedule->command('horizon-dashboard:cleanup-statistics --hours=168')->daily();
-        $schedule->command('horizon-dashboard:cleanup-exceptions --hours=168')->everyFifteenMinutes();
+    }
+```
+
+### Aggregating Data
+To prevent your database from growing, this package includes two aggregate and cleanup commands. You can adjust the values to work best for your install.
+The parameters for the aggregate commands are in minutes.
+```php
+    protected function schedule(Schedule $schedule)
+    {
         $schedule->command('horizon-dashboard:aggregate-queue-statistics --interval=60 --keep=240')->everyFifteenMinutes();
         $schedule->command('horizon-dashboard:aggregate-job-statistics --interval=15 --keep=60')->everyFifteenMinutes();
     }
 ```
 
-This package uses horizon's snapshot data and It's own to create the statistics.
-To prevent your database from growing, this package includes two aggregate and cleanup commands. You can adjust the values to work best for your install.
-The parameters for the aggregate commands are in minutes.
+For this you have to disable strict mode in your MySQL database config in `config/database.php`
+
+### Deleting old statistics
+```php
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->command('horizon-dashboard:cleanup-statistics --hours=168')->daily();
+        $schedule->command('horizon-dashboard:cleanup-exceptions --hours=168')->everyFifteenMinutes();
+    }
+```
 
 ## Authentication
 
