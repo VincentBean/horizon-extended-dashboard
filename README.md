@@ -14,6 +14,8 @@ The reason that I've created this is that the default Horizon dashboard lacks fe
   - Filtering on queue
 - Catch all exceptions that occur on your jobs
 - Detailed statistics
+- Retry/requeue **any** job
+- List all retries of a job
  
 
 ## Installation

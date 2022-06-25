@@ -2,11 +2,14 @@
 
 namespace VincentBean\HorizonDashboard\Http\Livewire;
 
+use Carbon\CarbonImmutable;
+use Illuminate\Contracts\Queue\Factory as Queue;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Laravel\Horizon\Contracts\JobRepository;
 use Livewire\Component;
 use VincentBean\HorizonDashboard\Actions\RetrieveJobData;
@@ -23,23 +26,21 @@ class JobDetail extends Component
     {
         $this->jobIdentifier = $jobIdentifier;
 
-        $job = $this->getJob();
-
-        if ($job === null) {
-            return;
-        }
-
-        $this->job = $job->toArray();
+        $this->retrieveJob();
     }
 
-    public function getJob(): ?Job
+    public function retrieveJob(): void
     {
         /** @var JobRepository $repository */
         $repository = app(JobRepository::class);
 
         $job = $repository->getJobs([$this->jobIdentifier])->first();
 
-        return $job === null ? null : Job::fromStdClass($job);
+        if ($job === null) {
+            return;
+        }
+
+        $this->job = Job::fromStdClass($job)->toArray();
     }
 
     public function render(): View
@@ -120,6 +121,34 @@ class JobDetail extends Component
         return $chain;
     }
 
+    public function enQueue(Queue $queue, JobRepository $jobs): void
+    {
+        $currentPayload = $this->job['payload'];
+
+
+        $newId = Str::uuid();
+
+        $retryUntil = $currentPayload['retryUntil'] ?? $currentPayload['timeoutAt'] ?? null;
+
+        $retryUntil = $retryUntil
+            ? CarbonImmutable::now()->addSeconds(ceil($retryUntil - $currentPayload['pushedAt']))->getTimestamp()
+            : null;
+
+        $rawPayload = json_encode(array_merge($currentPayload, [
+            'id' => $newId,
+            'uuid' => $newId,
+            'attempts' => 0,
+            'retry_of' => $this->jobIdentifier,
+            'retryUntil' => $retryUntil
+        ]));
+
+        $queue->connection($this->job['connection'])->pushRaw($rawPayload, $this->job['queue']);
+
+        $jobs->storeRetryReference($this->jobIdentifier, $newId);
+
+        $this->retrieveJob();
+    }
+    
     public function getExceptions(): Collection
     {
         return JobException::query()
@@ -128,8 +157,20 @@ class JobDetail extends Component
             ->get();
     }
 
+    public function hasRetries(): bool
+    {
+        return isset($this->job['retried_by']) && !blank($this->job['retried_by']);
+    }
+
+    public function getRetries(): array
+    {
+        return json_decode($this->job['retried_by'], true) ?? [];
+    }
+
     protected function getCommand(): ShouldQueue
     {
         return unserialize(data_get($this->job, 'payload.data.command'));
     }
 }
+
+
