@@ -155,7 +155,7 @@
                     </a>
 
                     <a href="{{ route('horizon-dashboard.statistics') }}"
-                        @php($active = Route::currentRouteNamed('horizon-dashboard.statistics'))
+                        @php($active = Route::current()->getPrefix() === 'horizon-dashboard/statistics')
                         @class([
                             'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
                            'bg-gray-900 text-white' => $active,

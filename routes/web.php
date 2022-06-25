@@ -8,7 +8,7 @@ use VincentBean\HorizonDashboard\Http\Controllers\ExceptionController;
 use VincentBean\HorizonDashboard\Http\Controllers\JobController;
 use VincentBean\HorizonDashboard\Http\Controllers\StatisticsController;
 
-Route::middleware(['web', Authenticate::class])->prefix('horizon-dashboard')->group(function() {
+Route::middleware(['web', Authenticate::class])->prefix('horizon-dashboard')->group(function () {
 
     Route::get('/', DashboardController::class)
         ->name('horizon-dashboard');
@@ -31,14 +31,23 @@ Route::middleware(['web', Authenticate::class])->prefix('horizon-dashboard')->gr
     Route::get('exception/{id}', [ExceptionController::class, 'show'])
         ->name('horizon-dashboard.exception');
 
-    Route::get('statistics', [StatisticsController::class, 'index'])
-        ->name('horizon-dashboard.statistics');
+    Route::prefix('statistics')->group(function () {
+        Route::get('/', [StatisticsController::class, 'index'])
+            ->name('horizon-dashboard.statistics');
 
-    Route::get('statistics/job/{id}', [StatisticsController::class, 'job'])
-        ->name('horizon-dashboard.statistics-job');
+        Route::get('job/{id}', [StatisticsController::class, 'job'])
+            ->name('horizon-dashboard.statistics-job');
 
-    Route::get('statistics/queue/{queue}', [StatisticsController::class, 'queue'])
-        ->name('horizon-dashboard.statistics-queue');
+        Route::get('queue/{queue}', [StatisticsController::class, 'queue'])
+            ->name('horizon-dashboard.statistics-queue');
+
+        Route::get('jobs', [StatisticsController::class, 'jobOverview'])
+            ->name('horizon-dashboard.statistics-jobs');
+
+        Route::get('queues', [StatisticsController::class, 'queueOverview'])
+            ->name('horizon-dashboard.statistics-queues');
+    });
+
 });
 
 
