@@ -131,7 +131,7 @@
                 </section>
             @endif
 
-            @if (!blank($job['exception']))
+            @if (isset($job['exception']))
                 <section>
                     <div class="bg-white shadow sm:rounded-lg">
                         <div class="px-4 py-5 sm:px-6">
