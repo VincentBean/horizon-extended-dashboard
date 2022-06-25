@@ -22,14 +22,4 @@ class WorkloadCard extends Component
 
         return view('horizondashboard::livewire.cards.workload-card', ['queues' => $queues]);
     }
-
-    public function clearQueue(RedisJobRepository $jobRepository, string $queue)
-    {
-
-        $jobId = $jobRepository->getPending()->first()->id;
-
-        
-
-//        $jobRepository->purge($queue);
-    }
 }
