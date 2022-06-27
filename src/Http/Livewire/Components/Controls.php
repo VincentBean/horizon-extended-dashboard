@@ -25,6 +25,11 @@ class Controls extends Component
         return view('horizondashboard::livewire.components.controls', ['status' => $this->currentStatus()]);
     }
 
+    public function boot()
+    {
+        $this->defineSignals();
+    }
+    
     public function hydrate()
     {
         if ($this->poll) {
@@ -38,8 +43,6 @@ class Controls extends Component
 
     public function pause()
     {
-        define('SIGUSR2', 12);
-
         if (blank($this->supervisor)) {
             Artisan::call(PauseCommand::class);
         } else {
@@ -51,8 +54,6 @@ class Controls extends Component
 
     public function continue()
     {
-        define('SIGCONT', 18);
-
         if (blank($this->supervisor)) {
             Artisan::call(ContinueCommand::class);
         } else {
@@ -64,8 +65,6 @@ class Controls extends Component
 
     public function terminate()
     {
-        define('SIGTERM', 15);
-
         Artisan::call(TerminateCommand::class);
 
         $this->startPolling();
@@ -86,7 +85,7 @@ class Controls extends Component
                 return 'inactive';
             }
 
-            return collect($masters)->every(fn ($master) : bool => $master->status === 'paused') ? 'paused' : 'running';
+            return collect($masters)->every(fn($master): bool => $master->status === 'paused') ? 'paused' : 'running';
         }
 
         /** @var SupervisorRepository $supervisorRepository */
@@ -99,5 +98,21 @@ class Controls extends Component
         }
 
         return $supervisor->status === 'paused' ? 'paused' : 'running';
+    }
+
+    protected function defineSignals()
+    {
+        $signals = [
+            'SIGTERM' => 15,
+            'SIGCONT' => 18,
+            'SIGUSR2 ' => 12
+        ];
+
+        foreach ($signals as $signal => $code) {
+            if (!defined($signal)) {
+                define($signal, $code);
+            }
+        }
+
     }
 }

@@ -24,7 +24,7 @@ class CleanupStatisticsCommand extends Command
         $queueQuery->delete();
 
         $jobQuery = JobStatistic::query()
-            ->where('finished_at', '<=', $to->getPreciseTimestamp(3));
+            ->where('finished_at', '<=', $to->getTimestamp());
 
         $this->info("Deleting {$jobQuery->count()} job statistics");
         $jobQuery->delete();

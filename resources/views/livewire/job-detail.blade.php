@@ -17,7 +17,7 @@
                                     <span
                                             class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-bold bg-yellow-100 text-yellow-800">UNIQUE</span>
                                 @endif
-                                @if (isset($job['retried_by']))
+                                @if (isset($job['retried_by']) && !blank($job['retried_by']))
                                     <span
                                             class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-bold bg-blue-100 text-blue-800">RETRIED</span>
                                 @endif
@@ -27,6 +27,14 @@
                             <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ implode(' · ', $description->toArray()) }}</p>
                         </div>
                         <div>
+                            <a href="{{ route('horizon-dashboard.statistics-job', ['id' => \VincentBean\HorizonDashboard\Models\JobStatistic::findByUuid($job['id'])->job_information_id]) }}" type="button"
+                                    class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Job Statistics
+                            </a>
+                            <a href="{{ route('horizon-dashboard.statistics-queue', ['queue' => $job['queue']]) }}" type="button"
+                               class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Queue Statistics
+                            </a>
                             <button wire:click="enQueue" type="button"
                                     class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Re-queue
@@ -60,27 +68,31 @@
                 </div>
             </section>
 
-            <section>
-                <div class="bg-white shadow sm:rounded-lg">
-                    <div class="px-4 py-5 sm:px-6">
-                        <div class="flex space-x-4">
-                            <h2 class="text-lg leading-6 font-medium text-gray-900">
-                                Data
-                            </h2>
+            @php($data = $this->getData($this->getCommand()))
+
+            @if (count($data))
+                <section>
+                    <div class="bg-white shadow sm:rounded-lg">
+                        <div class="px-4 py-5 sm:px-6">
+                            <div class="flex space-x-4">
+                                <h2 class="text-lg leading-6 font-medium text-gray-900">
+                                    Data
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-200">
+                            <dl>
+                                @foreach ($data as $detail)
+                                    <div class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                        <dt class="text-sm font-medium text-gray-500">{{ $detail['name'] }}</dt>
+                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $detail['value'] }}</dd>
+                                    </div>
+                                @endforeach
+                            </dl>
                         </div>
                     </div>
-                    <div class="border-t border-gray-200">
-                        <dl>
-                            @foreach ($this->getData($this->getCommand()) as $detail)
-                                <div class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">{{ $detail['name'] }}</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $detail['value'] }}</dd>
-                                </div>
-                            @endforeach
-                        </dl>
-                    </div>
-                </div>
-            </section>
+                </section>
+            @endif
 
             @if (count(data_get($this->job, 'payload.tags', [])))
                 <section>
@@ -131,7 +143,7 @@
                 </section>
             @endif
 
-            @if (isset($job['exception']))
+            @if (isset($job['exception']) && !blank($job['exception']))
                 <section>
                     <div class="bg-white shadow sm:rounded-lg">
                         <div class="px-4 py-5 sm:px-6">
@@ -244,7 +256,8 @@
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $retry['status'] }}</td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::createFromTimestamp($retry['retried_at'])->toDateTimeString() }}</td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                <a href="{{ route('horizon-dashboard.job', ['id' => $retry['id']]) }}" class="text-blue-800 hover:text-blue-600">View</a>
+                                                <a href="{{ route('horizon-dashboard.job', ['id' => $retry['id']]) }}"
+                                                   class="text-blue-800 hover:text-blue-600">View</a>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -25,9 +25,11 @@ use VincentBean\HorizonDashboard\Http\Livewire\BatchDetail;
 use VincentBean\HorizonDashboard\Http\Livewire\BatchList;
 use VincentBean\HorizonDashboard\Http\Livewire\Cards\SupervisorsCard;
 use VincentBean\HorizonDashboard\Http\Livewire\Components\Charts\JobRuntimeChart;
+use VincentBean\HorizonDashboard\Http\Livewire\Components\Charts\QueueCpuChart;
 use VincentBean\HorizonDashboard\Http\Livewire\Components\Charts\QueueJobCountsChart;
 use VincentBean\HorizonDashboard\Http\Livewire\Components\Charts\QueueJobPerMinuteChart;
 use VincentBean\HorizonDashboard\Http\Livewire\Components\Charts\QueueJobTypesChart;
+use VincentBean\HorizonDashboard\Http\Livewire\Components\Charts\QueueMemoryChart;
 use VincentBean\HorizonDashboard\Http\Livewire\Components\Controls;
 use VincentBean\HorizonDashboard\Http\Livewire\JobDetail;
 use VincentBean\HorizonDashboard\Http\Livewire\JobList;
@@ -109,6 +111,8 @@ class ServiceProvider extends BaseServiceProvider
         Livewire::component('horizon-dashboard.components.charts.queue-jobcounts-chart', QueueJobCountsChart::class);
         Livewire::component('horizon-dashboard.components.charts.queue-jobsperminute-chart', QueueJobPerMinuteChart::class);
         Livewire::component('horizon-dashboard.components.charts.queue-jobtypes-chart', QueueJobTypesChart::class);
+        Livewire::component('horizon-dashboard.components.charts.queue-cpu-chart', QueueCpuChart::class);
+        Livewire::component('horizon-dashboard.components.charts.queue-memory-chart', QueueMemoryChart::class);
 
         return $this;
     }

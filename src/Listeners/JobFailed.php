@@ -13,6 +13,6 @@ class JobFailed
 
         JobStatistic::query()
             ->where('uuid', $payload['uuid'])
-            ->update(['failed' => true, 'finished_at' => now()->getPreciseTimestamp(3)]);
+            ->update(['failed' => true, 'finished_at' => now()->getTimestamp()]);
     }
 }

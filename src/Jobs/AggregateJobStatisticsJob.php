@@ -29,8 +29,8 @@ class AggregateJobStatisticsJob implements ShouldQueue
     {
         $statisticsQuery = JobStatistic::query()
             ->where('aggregated', false)
-            ->where('queued_at', '>=', $this->from->getPreciseTimestamp(3))
-            ->where('queued_at', '<', $this->to->getPreciseTimestamp(3))
+            ->where('queued_at', '>=', $this->from->getTimestamp())
+            ->where('queued_at', '<', $this->to->getTimestamp())
             ->whereNotNull('finished_at')
             ->where('job_information_id', $this->jobInformationId)
             ->where('queue', $this->jobQueue);
@@ -43,7 +43,7 @@ class AggregateJobStatisticsJob implements ShouldQueue
 
         JobStatistic::query()->create([
             'job_information_id' => $this->jobInformationId,
-            'queued_at' => $this->from->getPreciseTimestamp(3),
+            'queued_at' => $this->from->getTimestamp(),
             'queue' => $this->jobQueue,
             'runtime' => $statisticsQuery->average('runtime') ?? 0,
             'attempts' => $statisticsQuery->average('attempts') ?? 0,

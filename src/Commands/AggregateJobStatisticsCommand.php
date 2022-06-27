@@ -48,13 +48,13 @@ class AggregateJobStatisticsCommand extends Command
         $this->info("Aggregating from {$startDate->toDateTimeString()} to {$endDate->toDateTimeString()}");
 
         for ($i = 0; $i < $steps; $i++) {
-            $from = (clone $startDate)->addMinutes($i * $interval);
-            $to = (clone $startDate)->addMinutes(($i + 1) * $interval);
+            $from = $startDate->copy()->addMinutes($i * $interval);
+            $to = $startDate->copy()->addMinutes(($i + 1) * $interval);
 
             $jobIdsAndQueue = JobStatistic::query()
                 ->where('aggregated', false)
-                ->where('queued_at', '>=', $from->getPreciseTimestamp(3))
-                ->where('queued_at', '<', $to->getPreciseTimestamp(3))
+                ->where('queued_at', '>=', $from->getTimestamp())
+                ->where('queued_at', '<', $to->getTimestamp())
                 ->distinct();
 
             $jobIds = $jobIdsAndQueue->select(['job_information_id'])->get()->pluck('job_information_id');

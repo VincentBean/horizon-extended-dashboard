@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use VincentBean\HorizonDashboard\Database\Factories\JobStatisticFactory;
 
 /**
- * @property string $id
+ * @property int $id
  * @property int $job_information_id
  * @property string $uuid
  * @property string $queue
@@ -41,7 +41,7 @@ class JobStatistic extends Model
     {
         return Attribute::make(
             get: fn($value) => Carbon::createFromTimestamp($value),
-            set: fn($value) => is_a($value, Carbon::class) ? $value->getPreciseTimestamp(3) : $value
+            set: fn($value) => is_a($value, Carbon::class) ? $value->getTimestamp() : $value
         );
     }
 
@@ -49,7 +49,7 @@ class JobStatistic extends Model
     {
         return Attribute::make(
             get: fn($value) => Carbon::createFromTimestamp($value),
-            set: fn($value) => is_a($value, Carbon::class) ? $value->getPreciseTimestamp(3) : $value
+            set: fn($value) => is_a($value, Carbon::class) ? $value->getTimestamp() : $value
         );
     }
 
@@ -57,7 +57,7 @@ class JobStatistic extends Model
     {
         return Attribute::make(
             get: fn($value) => Carbon::createFromTimestamp($value),
-            set: fn($value) => is_a($value, Carbon::class) ? $value->getPreciseTimestamp(3) : $value
+            set: fn($value) => is_a($value, Carbon::class) ? $value->getTimestamp() : $value
         );
     }
 
@@ -68,6 +68,13 @@ class JobStatistic extends Model
         }
 
         return $this->reserved_at->floatDiffInSeconds($this->finished_at);
+    }
+
+    public static function findByUuid(string $id): ?static
+    {
+        return static::query()
+            ->where('uuid', $id)
+            ->first();
     }
 
     protected static function newFactory(): JobStatisticFactory

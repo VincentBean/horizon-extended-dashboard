@@ -37,6 +37,8 @@
         <livewire:horizon-dashboard.components.charts.queue-jobcounts-chart :queue="$queue"/>
         <livewire:horizon-dashboard.components.charts.queue-jobsperminute-chart :queue="$queue"/>
         <livewire:horizon-dashboard.components.charts.queue-jobtypes-chart :queue="$queue"/>
+        <livewire:horizon-dashboard.components.charts.queue-cpu-chart :queue="$queue"/>
+        <livewire:horizon-dashboard.components.charts.queue-memory-chart :queue="$queue"/>
 
     </div>
 </x-horizondashboard::layout>

@@ -12,7 +12,7 @@ class JobReserved
         $payload = $event->payload->decoded;
 
         $statisticData = [
-            'reserved_at' => now()->getPreciseTimestamp(3)
+            'reserved_at' => now()->getTimestamp()
         ];
 
         JobStatistic::query()

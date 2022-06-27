@@ -47,8 +47,8 @@ class AggregateQueueStatisticsCommand extends Command
         $this->info("Aggregating from {$startDate->toDateTimeString()} to {$endDate->toDateTimeString()}");
 
         for ($i = 0; $i < $steps; $i++) {
-            $from = (clone $startDate)->addMinutes($i * $interval);
-            $to = (clone $startDate)->addMinutes(($i + 1) * $interval);
+            $from = $startDate->copy()->addMinutes($i * $interval);
+            $to = $startDate->copy()->addMinutes(($i + 1) * $interval);
 
             QueueStatistic::query()
                 ->where('aggregated', false)

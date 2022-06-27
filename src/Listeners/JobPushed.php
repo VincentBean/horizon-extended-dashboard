@@ -2,6 +2,7 @@
 
 namespace VincentBean\HorizonDashboard\Listeners;
 
+use Carbon\Carbon;
 use Laravel\Horizon\Events\JobPushed as JobPushedEvent;
 use VincentBean\HorizonDashboard\Models\JobInformation;
 use VincentBean\HorizonDashboard\Models\JobStatistic;
