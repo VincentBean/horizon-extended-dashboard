@@ -1,4 +1,4 @@
-<section class="space-y-6" wire:poll.30s>
+<section class="space-y-6" wire:poll>
 @foreach ($data as $master => $data)
     <div class="bg-white shadow sm:rounded-lg">
         <div class="px-4 py-5 sm:px-6">
@@ -7,7 +7,7 @@
                     Supervisor {{ $master }}
                 </h2>
                 <div class="flex">
-                    <span class="text-sm text-gray-800">PID: {{ $data->pid }} &middot; Status: {{ $data->status }}</span>
+                    <span class="text-sm text-gray-800">CPU: {{ $data->cpu_mem['cpu'] ?? 0 }}% &middot; Memory: {{ $data->cpu_mem['memory'] ?? 0 }}% &middot; PID: {{ $data->pid }} &middot; Status: {{ $data->status }}</span>
                 </div>
             </div>
         </div>
@@ -17,6 +17,8 @@
                 <tr>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
                     <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">PID</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">CPU</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Memory</th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Processes</th>
@@ -47,6 +49,8 @@
                             <livewire:horizon-dashboard.components.controls :key="$supervisor->pid" supervisor="{{ $supervisor->name }}"/>
                         </td>
                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $supervisor->pid }}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $supervisor->cpu_mem['cpu'] ?? 0 }}%</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $supervisor->cpu_mem['memory'] ?? 0 }}%</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $supervisor->name }}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $supervisor->status }}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">

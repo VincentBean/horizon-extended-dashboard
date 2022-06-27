@@ -6,6 +6,7 @@ use Illuminate\Contracts\View\View;
 use Laravel\Horizon\Contracts\MasterSupervisorRepository;
 use Laravel\Horizon\Contracts\SupervisorRepository;
 use Livewire\Component;
+use VincentBean\HorizonDashboard\Actions\Statistics\GetCpuMemoryUsage;
 
 class SupervisorsCard extends Component
 {
@@ -13,15 +14,21 @@ class SupervisorsCard extends Component
         'updateSupervisorStatus' => '$refresh'
     ];
 
-    public function render(MasterSupervisorRepository $masters,
-                           SupervisorRepository $supervisors): View
+    public function render(
+        MasterSupervisorRepository $masters,
+        SupervisorRepository       $supervisors,
+        GetCpuMemoryUsage          $getCpuMemoryUsage
+    ): View
     {
         $masters = collect($masters->all())->keyBy('name')->sortBy('name');
 
         $supervisors = collect($supervisors->all())->sortBy('name')->groupBy('master');
 
-        $data = $masters->each(function ($master, $name) use ($supervisors) {
-            $master->supervisors = $supervisors->get($name);
+        $data = $masters->each(function ($master, $name) use ($supervisors, $getCpuMemoryUsage) {
+            $master->supervisors = collect($supervisors->get($name))
+                ->each(fn($supervisor) => $supervisor->cpu_mem = $getCpuMemoryUsage->getForPid($supervisor->pid));
+
+            $master->cpu_mem = $getCpuMemoryUsage->getForPid($master->pid);
         });
 
         return view('horizondashboard::livewire.cards.supervisors-card', ['data' => $data]);
