@@ -70,7 +70,7 @@
                         </h2>
                     </div>
                 </div>
-                <div class="border-t border-gray-200">
+                <div class="border-t border-gray-200 overflow-x-scroll">
                     <table class="min-w-full divide-y divide-gray-300">
                         <thead class="bg-gray-50">
                         <tr>

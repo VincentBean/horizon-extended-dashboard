@@ -24,7 +24,9 @@
                     <tbody class="bg-white">
                     @foreach ($exceptions as $exception)
                     <tr>
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $exception->jobInformation->class }}</td>
+                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                            <a href="{{ route('horizon-dashboard.exception', ['id' => $exception->id]) }}">{{ $exception->jobInformation->class }}</a>
+                        </td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $exception['exception'] }}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $exception['message'] }}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $exception['attempt'] }}</td>
