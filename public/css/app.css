@@ -712,6 +712,24 @@ select {
 .right-6 {
   right: 1.5rem;
 }
+.bottom-0 {
+  bottom: 0px;
+}
+.bottom-1 {
+  bottom: 0.25rem;
+}
+.bottom-2 {
+  bottom: 0.5rem;
+}
+.left-2 {
+  left: 0.5rem;
+}
+.bottom-6 {
+  bottom: 1.5rem;
+}
+.bottom-4 {
+  bottom: 1rem;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -802,6 +820,9 @@ select {
 .w-8 {
   width: 2rem;
 }
+.w-56 {
+  width: 14rem;
+}
 .min-w-full {
   min-width: 100%;
 }
@@ -885,6 +906,9 @@ select {
 }
 .overflow-y-auto {
   overflow-y: auto;
+}
+.overflow-x-hidden {
+  overflow-x: hidden;
 }
 .overflow-x-scroll {
   overflow-x: scroll;
@@ -990,6 +1014,10 @@ select {
 .bg-purple-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(250 245 255 / var(--tw-bg-opacity));
+}
+.bg-blue-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
 }
 .p-4 {
   padding: 1rem;
@@ -1273,6 +1301,10 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
+.hover\:bg-blue-700:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+}
 .hover\:text-indigo-800:hover {
   --tw-text-opacity: 1;
   color: rgb(55 48 163 / var(--tw-text-opacity));
@@ -1309,6 +1341,10 @@ select {
 .focus\:ring-indigo-500:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity));
+}
+.focus\:ring-blue-500:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
 }
 .focus\:ring-offset-2:focus {
   --tw-ring-offset-width: 2px;

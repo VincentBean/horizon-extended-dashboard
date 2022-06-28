@@ -58,6 +58,14 @@ class JobInformation extends Model
         return round($failedCount / $successCount, 4);
     }
 
+
+    public static function findByClass(string $class): ?static
+    {
+        return static::query()
+            ->where('class', $class)
+            ->first();
+    }
+
     protected static function newFactory(): JobInformationFactory
     {
         return new JobInformationFactory();

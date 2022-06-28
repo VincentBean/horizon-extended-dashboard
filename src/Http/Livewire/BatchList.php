@@ -12,7 +12,7 @@ class BatchList extends Component
     public function render(): View
     {
         return view('horizondashboard::livewire.batch-list', [
-            'batches' => Batch::paginate(10)
+            'batches' => Batch::query()->orderByDesc('created_at')->paginate(10)
         ]);
     }
 

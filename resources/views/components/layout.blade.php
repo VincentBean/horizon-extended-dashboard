@@ -180,6 +180,12 @@
                         Horizon
                     </a>
 
+
+                    <span class="fixed bottom-4 w-56 text-sm text-gray-600 text-center">
+                        Made by <a target="_blank" href="https://github.com/VincentBean/">Vincent Bean</a> <br/>
+                        <a target="_blank" href="https://github.com/VincentBean/horizon-extended-dashboard">Get the code</a>
+                    </span>
+
                 </nav>
             </div>
         </div>

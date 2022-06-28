@@ -27,16 +27,21 @@
                             <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ implode(' · ', $description->toArray()) }}</p>
                         </div>
                         <div>
-                            <a href="{{ route('horizon-dashboard.statistics-job', ['id' => \VincentBean\HorizonDashboard\Models\JobStatistic::findByUuid($job['id'])->job_information_id]) }}" type="button"
-                                    class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Job Statistics
-                            </a>
-                            <a href="{{ route('horizon-dashboard.statistics-queue', ['queue' => $job['queue']]) }}" type="button"
-                               class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            @php($jobInfo = \VincentBean\HorizonDashboard\Models\JobInformation::findByClass($job['name']))
+                            @if ($jobInfo !== null)
+                                <a href="{{ route('horizon-dashboard.statistics-job', ['id' => $jobInfo->id]) }}"
+                                   type="button"
+                                   class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Job Statistics
+                                </a>
+                            @endif
+                            <a href="{{ route('horizon-dashboard.statistics-queue', ['queue' => $job['queue']]) }}"
+                               type="button"
+                               class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 Queue Statistics
                             </a>
                             <button wire:click="enQueue" type="button"
-                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 Re-queue
                             </button>
                         </div>
