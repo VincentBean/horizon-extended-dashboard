@@ -31,12 +31,12 @@ class JobInformation extends Model
 
     public function averageRuntime(): float
     {
-        return round($this->statistics()->average('runtime'), 2);
+        return round($this->statistics()->average('runtime'), 2) ?? 0;
     }
 
     public function averageAttempts(): int
     {
-        return $this->statistics()->average('attempts');
+        return $this->statistics()->average('attempts') ?? 0;
     }
 
     public function failRatio(): float

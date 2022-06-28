@@ -21,24 +21,15 @@ class GetCpuMemoryUsage
     {
         $result = shell_exec("ps -p $pid -o %cpu,%mem");
 
-        $result = explode("\n", $result);
-
-        if (count($result) != 3) {
-            return [];
+        if (preg_match_all('/[\d.]+/m', $result, $matches)) {
+            return [
+                'cpu' => $matches[0][0],
+                'memory' => $matches[0][1],
+            ];
         }
 
-        $result = explode(' ', $result[1]);
-
-        if (count($result) != 4) {
-            return [];
-        }
-
-        return [
-            'cpu' => (float)$result[1],
-            'memory' => (float)$result[3],
-        ];
+        return [];
     }
-
 
     protected function getPid(string $queue): ?string
     {
