@@ -25,7 +25,7 @@ class JobException
             ->first();
 
         $runtime = $statistic !== null
-            ? Carbon::createFromTimestampMs($statistic['reserved_at'])->floatDiffInSeconds(now())
+            ? Carbon::createFromTimestamp($statistic['reserved_at'])->floatDiffInSeconds(now())
             : 0;
 
         JobExceptionModel::create([
