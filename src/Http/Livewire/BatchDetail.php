@@ -40,4 +40,10 @@ class BatchDetail extends Component
             ->map(fn($job) => Job::fromStdClass($job))
             ->toArray();
     }
+
+    public function cancel()
+    {
+        Batch::find($this->batchIdentifier)
+            ->update(['cancelled_at' => now()]);
+    }
 }

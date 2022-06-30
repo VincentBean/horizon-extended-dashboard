@@ -12,9 +12,11 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravel\Horizon\Contracts\JobRepository;
 use Livewire\Component;
+use ReflectionClass;
 use VincentBean\HorizonDashboard\Actions\RetrieveJobData;
 use VincentBean\HorizonDashboard\Data\Job;
 use VincentBean\HorizonDashboard\Models\JobException;
+use function Livewire\invade;
 
 class JobDetail extends Component
 {
@@ -58,10 +60,38 @@ class JobDetail extends Component
 
     public function getData(ShouldQueue $job)
     {
-        $ignoreVars = ['backoff', 'tries', 'maxExceptions', 'queue', 'connection', 'chained', 'delay'];
+        $ignoreVars = [
+            'backoff',
+            'tries',
+            'maxExceptions',
+            'queue',
+            'connection',
+            'chained',
+            'delay',
+            'type',
+            'job',
+            'chainConnection',
+            'chainQueue',
+            'chainCatchCallbacks',
+            'afterCommit'
+        ];
 
-        return collect(get_object_vars($job))
-            ->reject(fn(mixed $value, string $key): bool => blank($value) || in_array($key, $ignoreVars))
+        $jobData = [];
+
+        $properties = (new ReflectionClass($job))->getProperties();
+
+        foreach ($properties as $property) {
+            if (in_array($property->getName(), $ignoreVars)) {
+                //continue;
+            }
+
+            $property->setAccessible(true);
+
+            $jobData[$property->getName()] = $property->getValue($job);
+        }
+
+        return collect($jobData)
+            ->reject(fn(mixed $value, string $key): bool => blank($value))
             ->map(function (mixed $value, string $key) {
 
                 if (is_a($value, Arrayable::class)) {
@@ -74,7 +104,7 @@ class JobDetail extends Component
 
                 return [
                     'name' => $key,
-                    'value' => is_string($value)
+                    'value' => is_string($value) || is_array($value)
                         ? $value
                         : json_encode($value)
                 ];
@@ -114,7 +144,8 @@ class JobDetail extends Component
 
             $chain[] = [
                 'name' => get_class($job),
-                'value' => json_encode($this->getData($job)->values()->mapWithKeys(fn(array $data) => [$data['name'] => $data['value']]))
+                'value' => json_encode($this->getData($job)->values()->mapWithKeys(fn(array $data
+                ) => [$data['name'] => $data['value']]))
             ];
         }
 
@@ -124,7 +155,6 @@ class JobDetail extends Component
     public function enQueue(Queue $queue, JobRepository $jobs): void
     {
         $currentPayload = $this->job['payload'];
-
 
         $newId = Str::uuid();
 
@@ -148,7 +178,7 @@ class JobDetail extends Component
 
         $this->retrieveJob();
     }
-    
+
     public function getExceptions(): Collection
     {
         return JobException::query()

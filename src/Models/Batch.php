@@ -24,6 +24,10 @@ class Batch extends Model
 
     public $keyType = 'string';
 
+    public $guarded = [];
+
+    public $timestamps = false;
+
     public $casts = [
       'failed_job_ids' => 'array'
     ];
@@ -36,7 +40,7 @@ class Batch extends Model
         );
     }
 
-    public function created_at(): Attribute
+    public function createdAt(): Attribute
     {
         return Attribute::make(
             get: fn(int $value) => Carbon::createFromTimestamp($value),
@@ -44,18 +48,18 @@ class Batch extends Model
         );
     }
 
-    public function cancelled_at(): Attribute
+    public function cancelledAt(): Attribute
     {
         return Attribute::make(
-            get: fn(int $value) => Carbon::createFromTimestamp($value),
+            get: fn(?int $value) => $value === null ? null : Carbon::createFromTimestamp($value),
             set: fn (Carbon $value) => $value->getTimestamp()
         );
     }
 
-    public function finished_at(): Attribute
+    public function finishedAt(): Attribute
     {
         return Attribute::make(
-            get: fn(int $value) => Carbon::createFromTimestamp($value),
+            get: fn(?int $value) => $value === null ? null : Carbon::createFromTimestamp($value),
             set: fn (Carbon $value) => $value->getTimestamp()
         );
     }

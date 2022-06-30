@@ -3,10 +3,16 @@
         <section>
             <div class="bg-white shadow sm:rounded-lg">
                 <div class="px-4 py-5 sm:px-6">
-                    <div class="flex space-x-4">
+                    <div class="flex space-x-4 justify-between">
                         <h2 class="text-lg leading-6 font-medium text-gray-900">
                             Batch Information
                         </h2>
+                        <div>
+                            <button wire:click="cancel" type="button"
+                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="border-t border-gray-200">

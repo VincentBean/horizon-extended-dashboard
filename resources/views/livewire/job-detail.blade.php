@@ -90,7 +90,13 @@
                                 @foreach ($data as $detail)
                                     <div class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                         <dt class="text-sm font-medium text-gray-500">{{ $detail['name'] }}</dt>
-                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $detail['value'] }}</dd>
+                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                            @if(is_array($detail['value']))
+                                                <pre>{{ json_encode($detail['value'], JSON_PRETTY_PRINT) }}</pre>
+                                            @else
+                                                {{ $detail['value'] }}
+                                            @endif
+                                        </dd>
                                     </div>
                                 @endforeach
                             </dl>
@@ -176,8 +182,8 @@
                                     </h2>
                                 </div>
                             </div>
-                            <div class="border-t border-gray-200">
-                                <table class="min-w-full divide-y divide-gray-300 overflow-y-scroll">
+                            <div class="border-t border-gray-200 overflow-y-scroll">
+                                <table class="min-w-full divide-y divide-gray-300">
                                     <thead class="bg-gray-50">
                                     <tr>
                                         <th scope="col"
