@@ -11,7 +11,7 @@ class ExceptionController extends Controller
     {
         return view('horizondashboard::exception-list', [
                 'exceptions' => JobException::query()
-                    ->orderBy('occured_at')
+                    ->orderByDesc('occured_at')
                     ->with('jobInformation')
                     ->paginate(25)
             ]

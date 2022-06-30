@@ -37,9 +37,9 @@
                                     </p>
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                                    Created At: {{ $batch->created_at->toDateTimeString() }}
+                                    Created At: {{ is_a($batch->created_at, \Carbon\Carbon::class) ? $batch->created_at->toDateTimeString() : $batch->created_at }}
                                     @if ($batch->finished_at != null)
-                                    &middot; Finished At: {{ $batch->finished_at->toDateTimeString() }}
+                                    &middot; Finished At: {{ is_a($batch->finished_at, \Carbon\Carbon::class) ? $batch->finished_at->toDateTimeString() : $batch->finished_at }}
                                     @endif
                                 </div>
                             </div>
