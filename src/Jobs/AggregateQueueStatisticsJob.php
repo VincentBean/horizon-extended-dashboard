@@ -4,6 +4,7 @@ namespace VincentBean\HorizonDashboard\Jobs;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -11,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use VincentBean\HorizonDashboard\Models\JobStatistic;
 use VincentBean\HorizonDashboard\Models\QueueStatistic;
 
-class AggregateQueueStatisticsJob implements ShouldQueue
+class AggregateQueueStatisticsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -22,7 +23,7 @@ class AggregateQueueStatisticsJob implements ShouldQueue
         public string $jobQueue,
         public Carbon $from,
         public Carbon $to,
-    ){
+    ) {
     }
 
     public function handle()
@@ -62,5 +63,19 @@ class AggregateQueueStatisticsJob implements ShouldQueue
         ]);
 
         $statisticsQuery->delete();
+    }
+
+    public function uniqueId(): string
+    {
+        return implode('-', $this->tags());
+    }
+
+    public function tags(): array
+    {
+        return [
+            $this->jobQueue,
+            $this->from->toDateTimeString(),
+            $this->to->toDateTimeString(),
+        ];
     }
 }
