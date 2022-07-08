@@ -42,7 +42,7 @@ class AggregateJobStatisticsJob implements ShouldQueue, ShouldBeUnique
             return;
         }
 
-        JobStatistic::query()->create([
+        $aggregatedData = [
             'job_information_id' => $this->jobInformationId,
             'queued_at' => $this->from->getTimestamp(),
             'queue' => $this->jobQueue,
@@ -50,10 +50,12 @@ class AggregateJobStatisticsJob implements ShouldQueue, ShouldBeUnique
             'attempts' => $statisticsQuery->average('attempts') ?? 0,
             'aggregated' => true,
             'aggregated_job_count' => $count,
-            'aggregated_failed_count' => $statisticsQuery->where('failed', true)->count()
-        ]);
+            'aggregated_failed_count' => $statisticsQuery->clone()->where('failed', true)->count()
+        ];
 
         $statisticsQuery->delete();
+
+        JobStatistic::query()->create($aggregatedData);
     }
 
     public function uniqueId(): string

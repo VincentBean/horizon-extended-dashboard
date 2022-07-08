@@ -4,10 +4,7 @@ namespace VincentBean\HorizonDashboard\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use VincentBean\HorizonDashboard\Actions\RetrieveQueues;
 use VincentBean\HorizonDashboard\Jobs\AggregateJobStatisticsJob;
-use VincentBean\HorizonDashboard\Models\JobInformation;
 use VincentBean\HorizonDashboard\Models\JobStatistic;
 
 class AggregateJobStatisticsCommand extends Command
@@ -18,22 +15,16 @@ class AggregateJobStatisticsCommand extends Command
                 --interval: Interval in minutes
                 --keep: Don\'t aggregate minutes';
 
-    public function handle(RetrieveQueues $retrieveQueues)
+    public function handle()
     {
         $interval = $this->option('interval');
         $keep = $this->option('keep');
 
-        $lastAggregated = JobStatistic::query()
-            ->where('aggregated', true)
-            ->orderByDesc('queued_at')
-            ->first();
-
         /** @var Carbon $startDate */
-        $startDate = $lastAggregated !== null
-            ? $lastAggregated->queued_at
-            : JobStatistic::query()
-                ->orderBy('queued_at')
-                ->firstOrFail()->queued_at;
+        $startDate = JobStatistic::query()
+            ->where('aggregated', false)
+            ->orderBy('queued_at')
+            ->firstOrFail()->queued_at;
 
         $endDate = now()->subMinutes($keep);
 
@@ -62,7 +53,7 @@ class AggregateJobStatisticsCommand extends Command
 
             foreach ($queues as $queue) {
                 foreach ($jobIds as $jobId) {
-                    AggregateJobStatisticsJob::dispatch($jobId, $queue, $from, $to);
+                    AggregateJobStatisticsJob::dispatchSync($jobId, $queue, $from, $to);
                 }
             }
 
