@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Laravel\Horizon\Contracts\JobRepository;
 use Livewire\Component;
 use stdClass;
+use VincentBean\HorizonDashboard\Actions\RetrieveQueues;
 use VincentBean\HorizonDashboard\Data\Job;
 
 class JobList extends Component
@@ -83,12 +84,9 @@ class JobList extends Component
 
     public function getQueues(): array
     {
-        $queues = [];
+        /** @var RetrieveQueues $action */
+        $action = app(RetrieveQueues::class);
 
-        foreach (config('horizon.environments.' . config('app.env')) as $supervisor) {
-            $queues = array_merge($queues, $supervisor['queue']);
-        }
-
-        return $queues;
+        return $action->handle()->toArray();
     }
 }
