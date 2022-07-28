@@ -5,32 +5,32 @@
                 <div class="px-4 py-5 sm:px-6">
                     <div class="space-y-2">
                         <h2 class="text-lg leading-6 font-medium text-gray-900">
-                            {{ $exception['exception'] }}
+                            {{ $exception->exception }}
                         </h2>
-                        <span class="text-sm text-gray-800">{{ $exception['jobInformation']['class'] }}</span>
+                        <span class="text-sm text-gray-800">{{ $exception->jobInformation?->class }}</span>
                     </div>
                 </div>
                 <div class="border-t border-gray-200">
                     <dl>
                         <div
-                            class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Occured At</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $exception['occured_at']->toDateTimeString() }}</dd>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $exception->occured_at?->toDateTimeString() }}</dd>
                         </div>
                         <div
-                            class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Message</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $exception['message'] }}</dd>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $exception->message }}</dd>
                         </div>
                         <div
-                            class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Attempt</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $exception['attempt'] }}</dd>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $exception->attempt }}</dd>
                         </div>
                         <div
-                            class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Job Runtime</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $exception['runtime'] }}s
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $exception->runtime }}s
                             </dd>
                         </div>
                     </dl>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="border-t border-gray-200">
                     <dl>
-                        @foreach ($exception['data'] as $name => $value)
+                        @foreach ($exception->data as $name => $value)
                             <div class="bg-white odd:bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">{{ $name }}</dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ json_encode($value) }}</dd>
@@ -80,13 +80,19 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-                        @foreach ($exception['trace'] as $line)
+                        @foreach ($exception->trace as $line)
                             <tr @class([
-                                    'bg-gray-100' => str_contains($line['file'], '/vendor/')
+                                    'bg-gray-100' => str_contains($line['file'] ?? '', '/vendor/')
                             ])>
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ str_replace(base_path(), '', $line['file']) }}</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $line['line'] }}</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ implode('', [$line['class'], $line['type'], $line['function']]) }}</td>
+                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                    {{ str_replace(base_path(), '', $line['file'] ?? '') }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ $line['line'] ?? '' }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ implode('', [$line['class'] ?? '', $line['type'] ?? '', $line['function'] ?? '']) }}
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
