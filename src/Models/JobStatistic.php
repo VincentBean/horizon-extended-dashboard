@@ -48,7 +48,7 @@ class JobStatistic extends Model
     protected function reservedAt(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Carbon::createFromTimestamp($value),
+            get: fn($value) => $value === null ? null : Carbon::createFromTimestamp($value),
             set: fn($value) => is_a($value, Carbon::class) ? $value->getTimestamp() : $value
         );
     }
@@ -56,7 +56,7 @@ class JobStatistic extends Model
     protected function finishedAt(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Carbon::createFromTimestamp($value),
+            get: fn($value) => $value === null ? null : Carbon::createFromTimestamp($value),
             set: fn($value) => is_a($value, Carbon::class) ? $value->getTimestamp() : $value
         );
     }
