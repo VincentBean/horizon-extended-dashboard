@@ -63,11 +63,18 @@ class JobStatistic extends Model
 
     public function calculateRuntime(): ?float
     {
-        if ($this->reserved_at === null || $this->finished_at === null) {
+        if (blank($this->reserved_at) || blank($this->finished_at)) {
             return null;
         }
 
-        return $this->reserved_at->floatDiffInSeconds($this->finished_at);
+        $runtime = $this->reserved_at->floatDiffInSeconds($this->finished_at);
+
+        // Dirty fix to prevent timestamps from being returned
+        if ($runtime > 10000) {
+            return null;
+        }
+
+        return $runtime;
     }
 
     public static function findByUuid(string $id): ?static
