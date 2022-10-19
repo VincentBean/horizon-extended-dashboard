@@ -57,7 +57,7 @@ class ChunkJobAggregationsJob implements ShouldQueue, ShouldBeUnique
 
             foreach ($queues as $queue) {
                 foreach ($jobIds as $jobId) {
-                    AggregateJobStatisticsJob::dispatchSync($jobId, $queue, $from, $to);
+                    AggregateJobStatisticsJob::dispatch($jobId, $queue, $from, $to);
                 }
             }
 
