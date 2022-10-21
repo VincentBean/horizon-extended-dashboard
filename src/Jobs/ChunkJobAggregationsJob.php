@@ -18,6 +18,8 @@ class ChunkJobAggregationsJob implements ShouldQueue, ShouldBeUnique
     use Queueable;
     use SerializesModels;
 
+    public int $timeout = 3600;
+
     public function __construct(
         protected int $keep,
         protected int $interval,
