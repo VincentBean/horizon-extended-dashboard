@@ -33,7 +33,6 @@ class AggregateJobStatisticsJob implements ShouldQueue, ShouldBeUnique
             ->where('aggregated', false)
             ->where('queued_at', '>=', $this->from->getTimestamp())
             ->where('queued_at', '<', $this->to->getTimestamp())
-            ->whereNotNull('finished_at')
             ->where('job_information_id', $this->jobInformationId)
             ->where('queue', $this->jobQueue);
 
