@@ -17,6 +17,7 @@ class AggregateJobStatisticsJob implements ShouldQueue, ShouldBeUnique
 
     public int $backoff = 10;
     public int $tries = 5;
+    public int $timeout = 3600;
 
     public function __construct(
         public int $jobInformationId,
