@@ -67,7 +67,8 @@
             <div class="flex flex-col space-y-3">
                 @foreach ($queues as $queue)
                     <a href="{{ route('horizon-dashboard.statistics-queue', ['queue' => $queue]) }}"
-                       class="bg-white shadow rounded-md px-6 py-4 hover:bg-gray-100">
+                       title="{{ $queue }}"
+                       class="bg-white shadow rounded-md px-6 py-4 hover:bg-gray-100 truncate">
                         {{ $queue }}
                     </a>
                 @endforeach
@@ -80,7 +81,8 @@
                 <div class="flex flex-col space-y-3">
                     @foreach ($jobs as $job)
                         <a href="{{ route('horizon-dashboard.statistics-job', ['id' => $job->id]) }}"
-                           class="bg-white shadow rounded-md px-6 py-4 hover:bg-gray-100">
+                           title="{{ $job->class }}"
+                           class="bg-white shadow rounded-md px-6 py-4 hover:bg-gray-100 truncate">
                             {{ $job->class }}
                         </a>
                     @endforeach
