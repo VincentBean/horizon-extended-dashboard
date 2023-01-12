@@ -1,28 +1,26 @@
-name: "Update Changelog"
-
+name: Generate changelog
 on:
   release:
-    types: [published]
+    types: [created, edited]
 
 jobs:
-  update:
+  changelog:
+    name: Generate changelog
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.release.target_commitish }}
+          fetch-depth: 0
 
-      - name: Update Changelog
-        uses: stefanzweifel/changelog-updater-action@v1
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v2
+        id: git-cliff
         with:
-          latest-version: ${{ github.event.release.tag_name }}
-          release-notes: ${{ github.event.release.body }}
+          config: cliff.toml
+          args: --verbose
+        env:
+          OUTPUT: CHANGELOG.md
 
-      - name: Commit updated CHANGELOG
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          branch: ${{ github.event.release.target_commitish }}
-          commit_message: Update CHANGELOG
-          file_pattern: CHANGELOG.md
+      - name: Print the changelog
+        run: cat "${{ steps.git-cliff.outputs.changelog }}"
