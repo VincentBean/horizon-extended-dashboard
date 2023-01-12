@@ -1,9 +1,8 @@
 name: "Update Changelog"
 
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types: [published]
 
 jobs:
   update:
@@ -11,19 +10,19 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          ref: main
+          ref: ${{ github.event.release.target_commitish }}
 
       - name: Update Changelog
         uses: stefanzweifel/changelog-updater-action@v1
         with:
-          latest-version: ${{ github.event.release.name }}
+          latest-version: ${{ github.event.release.tag_name }}
           release-notes: ${{ github.event.release.body }}
 
       - name: Commit updated CHANGELOG
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: main
-          commit_message: Update Changelog
+          branch: ${{ github.event.release.target_commitish }}
+          commit_message: Update CHANGELOG
           file_pattern: CHANGELOG.md
