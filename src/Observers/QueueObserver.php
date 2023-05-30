@@ -8,7 +8,6 @@ use VincentBean\HorizonDashboard\Models\JobStatistic;
 
 class QueueObserver
 {
-
     public function before(JobProcessing $event): void
     {
 
@@ -17,7 +16,6 @@ class QueueObserver
 
     public function after(JobProcessed $event): void
     {
-        dd('after');
         $job = $event->job;
         $payload = $job->payload();
 
