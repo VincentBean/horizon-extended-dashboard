@@ -40,7 +40,16 @@ class ServiceProvider extends BaseServiceProvider
 {
     public function register()
     {
-        $this->registerCommands();
+        $this
+            ->registerConfig()
+            ->registerCommands();
+    }
+
+    protected function registerConfig(): static
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/horizon-dashboard.php', 'horizon-dashboard');
+
+        return $this;
     }
 
     protected function registerCommands(): static
