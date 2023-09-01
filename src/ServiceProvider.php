@@ -40,7 +40,16 @@ class ServiceProvider extends BaseServiceProvider
 {
     public function register()
     {
-        $this->registerCommands();
+        $this
+            ->registerConfig()
+            ->registerCommands();
+    }
+
+    protected function registerConfig(): static
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/horizon-dashboard.php', 'horizon-dashboard');
+
+        return $this;
     }
 
     protected function registerCommands(): static
@@ -71,12 +80,22 @@ class ServiceProvider extends BaseServiceProvider
     public function boot()
     {
         $this
+            ->bootConfig()
             ->bootViews()
             ->bootRoutes()
             ->bootLivewire()
             ->bootEvents()
             ->bootMigrations()
             ->bootPublish();
+    }
+
+    protected function bootConfig(): static
+    {
+        $this->publishes([
+            __DIR__.'/../config/horizon-dashboard.php' => config_path('horizon-dashboard.php'),
+        ]);
+
+        return $this;
     }
 
     protected function bootViews(): static
