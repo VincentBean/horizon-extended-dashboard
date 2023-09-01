@@ -47,7 +47,7 @@ class TakeQueueSnapshot
 
             'average_runtime' => JobStatistic::query()
                 ->where('queue', $queue)
-                ->whereDate('finished_at', '>', $since)
+                ->where('finished_at', '>', $since)
                 ->average('runtime') ?? 0,
 
             'jobs' => JobStatistic::query()
