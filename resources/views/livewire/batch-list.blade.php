@@ -1,4 +1,8 @@
 <div wire:poll.5s>
+    @if (! count($batches))
+        No Batches
+    @endif
+    
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
         <ul role="list" class="divide-y divide-gray-200">
             @foreach ($batches as $batch)
@@ -50,7 +54,7 @@
         </ul>
     </div>
     <div class="mt-2">
-        {{ $batches->links() }}
+        {{ count($batches) ? $batches->links() : '' }}
     </div>
 
 </div>
