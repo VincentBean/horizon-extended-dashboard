@@ -75,7 +75,7 @@ class Controls extends Component
         $this->poll = true;
         $this->pollCount = 0;
 
-        $this->emit('updateSupervisorStatus');
+        $this->disptch('updateSupervisorStatus');
     }
 
     protected function currentStatus()
