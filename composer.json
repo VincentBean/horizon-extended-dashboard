@@ -1,33 +1,33 @@
 {
-    "name": "vincentbean/horizon-extended-dashboard",
-    "description":"",
-    "license":"MIT",
-    "authors":[
-        {
-            "name":"Vincent Boon",
-            "email":"info@vincentbean.com",
-            "homepage":"https://vincentbean.com",
-            "role":"Developer"
-        }
-    ],
-    "require":{
-        "php": "^8.0",
-        "asantibanez/livewire-charts": "^3.0.1",
-        "ext-posix": "*",
-        "ext-pcntl": "*"
-    },
-    "autoload":{
-        "psr-4":{
-            "VincentBean\\HorizonDashboard\\": "src",
-            "VincentBean\\HorizonDashboard\\Database\\Factories\\": "database/factories",
-            "VincentBean\\HorizonDashboard\\Database\\Seeders\\": "database/seeders"
-        }
-    },
-    "extra":{
-        "laravel":{
-            "providers":[
-                "VincentBean\\HorizonDashboard\\ServiceProvider"
-            ]
-        }
+  "name": "vincentbean/horizon-extended-dashboard",
+  "description": "",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Vincent Boon",
+      "email": "info@vincentbean.com",
+      "homepage": "https://vincentbean.com",
+      "role": "Developer"
     }
+  ],
+  "require": {
+    "php": "^8.0",
+    "asantibanez/livewire-charts": "^3.0.1",
+    "ext-posix": "*",
+    "ext-pcntl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "VincentBean\\HorizonDashboard\\": "src",
+      "VincentBean\\HorizonDashboard\\Database\\Factories\\": "database/factories",
+      "VincentBean\\HorizonDashboard\\Database\\Seeders\\": "database/seeders"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "VincentBean\\HorizonDashboard\\ServiceProvider"
+      ]
+    }
+  }
 }
