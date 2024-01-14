@@ -99,9 +99,9 @@ class Job implements Arrayable
             'status' => $this->status,
             'payload' => $this->payload,
             'exception' => $this->exception,
-            'failed_at' => $this->failedAt->timestamp == 0 ? '' : $this->failedAt->toDateTimeString(),
-            'completed_at' => $this->completedAt->timestamp == 0 ? '' : $this->completedAt->toDateTimeString(),
-            'reserved_at' => $this->reservedAt->timestamp == 0 ? '' : $this->reservedAt->toDateTimeString(),
+            'failed_at' => !$this->failedAt->timestamp ? '' : $this->failedAt->toDateTimeString(),
+            'completed_at' => !$this->completedAt->timestamp ? '' : $this->completedAt->toDateTimeString(),
+            'reserved_at' => !$this->reservedAt->timestamp ? '' : $this->reservedAt->toDateTimeString(),
             'retried_by' => $this->retriedBy,
             'viewData' => [
                 'tries' => $this->getTriesString(),
