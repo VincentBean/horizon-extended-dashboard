@@ -17,7 +17,7 @@ class GetCpuMemoryUsage
         return $this->getForPid($this->getPid($queue));
     }
 
-    public function getForPid(int $pid): array
+    public function getForPid(?string $pid): array
     {
         $result = shell_exec("ps -p $pid -o %cpu,%mem");
 
