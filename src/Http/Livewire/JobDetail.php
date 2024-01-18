@@ -58,7 +58,7 @@ class JobDetail extends Component
         return $retriever->handle($this->job);
     }
 
-    public function getData(ShouldQueue $job)
+    public function getData(ShouldQueue|SendQueuedMailable $job)
     {
         $ignoreVars = [
             'backoff',
