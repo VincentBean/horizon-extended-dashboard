@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\View\View;
+use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravel\Horizon\Contracts\JobRepository;
@@ -16,7 +17,6 @@ use ReflectionClass;
 use VincentBean\HorizonDashboard\Actions\RetrieveJobData;
 use VincentBean\HorizonDashboard\Data\Job;
 use VincentBean\HorizonDashboard\Models\JobException;
-use function Livewire\invade;
 
 class JobDetail extends Component
 {
@@ -197,7 +197,7 @@ class JobDetail extends Component
         return json_decode($this->job['retried_by'], true) ?? [];
     }
 
-    protected function getCommand(): ShouldQueue
+    protected function getCommand(): ShouldQueue|SendQueuedMailable
     {
         return unserialize(data_get($this->job, 'payload.data.command'));
     }

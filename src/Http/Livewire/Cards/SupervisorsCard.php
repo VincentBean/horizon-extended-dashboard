@@ -6,7 +6,7 @@ use Illuminate\Contracts\View\View;
 use Laravel\Horizon\Contracts\MasterSupervisorRepository;
 use Laravel\Horizon\Contracts\SupervisorRepository;
 use Livewire\Component;
-use VincentBean\HorizonDashboard\Actions\Statistics\GetCpuMemoryUsage;
+use VincentBean\HorizonDashboard\Http\Controllers\GetCpuMemoryUsage;
 
 class SupervisorsCard extends Component
 {

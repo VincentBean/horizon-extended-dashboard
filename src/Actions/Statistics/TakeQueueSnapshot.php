@@ -4,6 +4,7 @@ namespace VincentBean\HorizonDashboard\Actions\Statistics;
 
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Horizon\Contracts\MetricsRepository;
+use VincentBean\HorizonDashboard\Http\Controllers\GetCpuMemoryUsage;
 use VincentBean\HorizonDashboard\Models\JobStatistic;
 use VincentBean\HorizonDashboard\Models\QueueStatistic;
 
