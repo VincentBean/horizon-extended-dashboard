@@ -1,6 +1,6 @@
 <?php
 
-namespace VincentBean\HorizonDashboard\Http\Controllers;
+namespace VincentBean\HorizonDashboard\Actions\Statistics;
 
 use Laravel\Horizon\Contracts\SupervisorRepository;
 
