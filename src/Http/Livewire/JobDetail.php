@@ -81,10 +81,6 @@ class JobDetail extends Component
         $properties = (new ReflectionClass($job))->getProperties();
 
         foreach ($properties as $property) {
-            if (in_array($property->getName(), $ignoreVars)) {
-                //continue;
-            }
-
             $property->setAccessible(true);
 
             $jobData[$property->getName()] = $property->getValue($job);
